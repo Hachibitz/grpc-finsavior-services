@@ -1,2 +1,2 @@
 # grpc-finsavior-services
-gRPC services to serve the backend
+A multimodule Java/gRPC services to serve the backend
