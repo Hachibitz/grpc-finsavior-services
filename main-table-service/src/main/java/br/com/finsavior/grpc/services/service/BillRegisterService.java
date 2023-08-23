@@ -1,8 +1,8 @@
 package br.com.finsavior.grpc.services.service;
 
 import br.com.finsavior.grpc.maintable.MainServiceGrpc;
-import br.com.finsavior.grpc.maintable.MainTableRequestDTO;
-import br.com.finsavior.grpc.maintable.MainTableResponseDTO;
+import br.com.finsavior.grpc.maintable.BillRegisterRequest;
+import br.com.finsavior.grpc.maintable.BillRegisterResponse;
 import br.com.finsavior.grpc.services.entity.MainTable;
 import br.com.finsavior.grpc.services.repository.MainTableRepository;
 import io.grpc.netty.shaded.io.netty.handler.codec.http.HttpResponseStatus;
@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 @GrpcService
-public class MainService extends MainServiceGrpc.MainServiceImplBase {
+public class BillRegisterService extends MainServiceGrpc.MainServiceImplBase {
 
     Logger logger = LoggerFactory.getLogger(MainServiceGrpc.MainServiceImplBase.class);
 
@@ -22,12 +22,12 @@ public class MainService extends MainServiceGrpc.MainServiceImplBase {
     MainTableRepository repository;
 
     @Override
-    public void billRegister(MainTableRequestDTO request, StreamObserver<MainTableResponseDTO> responseObserver) {
+    public void billRegister(BillRegisterRequest request, StreamObserver<BillRegisterResponse> responseObserver) {
         ModelMapper modelMapper = new ModelMapper();
         MainTable register = modelMapper.map(request ,MainTable.class);
         repository.save(register);
 
-        MainTableResponseDTO response = MainTableResponseDTO.newBuilder()
+        BillRegisterResponse response = BillRegisterResponse.newBuilder()
                 .setStatus(HttpResponseStatus.OK.toString())
                 .setMessage(request)
                 .build();
