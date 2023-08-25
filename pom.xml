@@ -87,5 +87,6 @@
     <modules>
         <module>proto</module>
         <module>main-table-service</module>
+        <module>user-service</module>
     </modules>
 </project>
