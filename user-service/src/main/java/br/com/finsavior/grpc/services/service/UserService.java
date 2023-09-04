@@ -1,6 +1,8 @@
 package br.com.finsavior.grpc.services.service;
 
+import br.com.finsavior.grpc.services.model.entity.Role;
 import br.com.finsavior.grpc.services.model.entity.User;
+import br.com.finsavior.grpc.services.model.enums.UserRoleEnum;
 import br.com.finsavior.grpc.services.repository.UserRepository;
 import br.com.finsavior.grpc.user.SignUpRequest;
 import br.com.finsavior.grpc.user.SignUpResponse;
@@ -16,7 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class UserService extends UserServiceGrpc.UserServiceImplBase {
 
     @Autowired
-    UserRepository repository;
+    UserRepository userRepository;
 
     Logger logger = LoggerFactory.getLogger(UserServiceGrpc.UserServiceImplBase.class);
 
@@ -24,7 +26,9 @@ public class UserService extends UserServiceGrpc.UserServiceImplBase {
     public void signUp(SignUpRequest request, StreamObserver<SignUpResponse> responseObserver) {
         ModelMapper modelMapper = new ModelMapper();
         User user = modelMapper.map(request, User.class);
-        repository.save(user);
+        Role role = new Role(UserRoleEnum.ROLE_USER.id, UserRoleEnum.ROLE_USER);
+        user.getRoles().add(role);
+        userRepository.save(user);
 
         SignUpResponse signUpResponse = SignUpResponse.newBuilder()
                 .setMessage("Cadastro realizado com sucesso!")
