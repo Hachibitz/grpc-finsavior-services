@@ -1,14 +1,11 @@
 package br.com.finsavior.grpc.services.service;
 
-import br.com.finsavior.grpc.services.model.entity.Role;
 import br.com.finsavior.grpc.services.model.entity.User;
-import br.com.finsavior.grpc.services.model.enums.UserRoleEnum;
 import br.com.finsavior.grpc.services.repository.UserRepository;
 import br.com.finsavior.grpc.user.*;
 import io.grpc.stub.StreamObserver;
 import lombok.extern.slf4j.Slf4j;
 import net.devh.boot.grpc.server.service.GrpcService;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.transaction.Transactional;
@@ -20,24 +17,6 @@ public class UserService extends UserServiceGrpc.UserServiceImplBase {
 
     @Autowired
     UserRepository userRepository;
-
-    @Override
-    public void signUp(SignUpRequest request, StreamObserver<SignUpResponse> responseObserver) {
-        ModelMapper modelMapper = new ModelMapper();
-        User user = modelMapper.map(request, User.class);
-        Role role = new Role(UserRoleEnum.ROLE_USER.id, UserRoleEnum.ROLE_USER);
-        user.getRoles().add(role);
-        userRepository.save(user);
-
-        SignUpResponse signUpResponse = SignUpResponse.newBuilder()
-                .setMessage("Cadastro realizado com sucesso!")
-                .build();
-
-        log.info("Cadastro realizado com sucesso: "+user.getUsername());
-
-        responseObserver.onNext(signUpResponse);
-        responseObserver.onCompleted();
-    }
 
     @Override
     @Transactional
