@@ -4,8 +4,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class BillRegisterModule {
+public class TableDataModule {
     public static void main(String[] args) {
-        SpringApplication.run(BillRegisterModule.class, args);
+        SpringApplication.run(TableDataModule.class, args);
     }
 }
