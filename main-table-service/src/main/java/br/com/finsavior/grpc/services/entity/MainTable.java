@@ -1,9 +1,14 @@
 package br.com.finsavior.grpc.services.entity;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
 
 @Entity
 @Table(name = "main_table")
+@Data
+@NoArgsConstructor
 public class MainTable {
 
     @Id
@@ -27,63 +32,4 @@ public class MainTable {
 
     @Column(name = "bill_description")
     private String billDescription;
-
-    public MainTable() {
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
-
-    public String getBillType() {
-        return billType;
-    }
-
-    public void setBillType(String billType) {
-        this.billType = billType;
-    }
-
-    public String getBillDate() {
-        return billDate;
-    }
-
-    public void setBillDate(String billDate) {
-        this.billDate = billDate;
-    }
-
-    public String getBillName() {
-        return billName;
-    }
-
-    public void setBillName(String billName) {
-        this.billName = billName;
-    }
-
-    public double getBillValue() {
-        return billValue;
-    }
-
-    public void setBillValue(double billValue) {
-        this.billValue = billValue;
-    }
-
-    public String getBillDescription() {
-        return billDescription;
-    }
-
-    public void setBillDescription(String billDescription) {
-        this.billDescription = billDescription;
-    }
 }
