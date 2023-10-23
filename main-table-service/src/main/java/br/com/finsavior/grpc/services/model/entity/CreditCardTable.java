@@ -1,4 +1,4 @@
-package br.com.finsavior.grpc.services.entity;
+package br.com.finsavior.grpc.services.model.entity;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -6,10 +6,10 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "main_table")
+@Table(name = "credit_card_table")
 @Data
 @NoArgsConstructor
-public class MainTable {
+public class CreditCardTable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,9 +17,6 @@ public class MainTable {
 
     @Column(name = "user_id")
     private Long userId;
-
-    @Column(name = "bill_type")
-    private String billType;
 
     @Column(name = "bill_date")
     private String billDate;
