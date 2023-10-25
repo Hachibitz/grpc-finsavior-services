@@ -89,6 +89,7 @@ public class TableDataService extends TableDataServiceGrpc.TableDataServiceImplB
 
         mainTableList.forEach((data) -> {
             MainTableData mainTableData = MainTableData.newBuilder()
+                    .setId(data.getId())
                     .setBillName(data.getBillName())
                     .setBillValue(data.getBillValue())
                     .setBillType(data.getBillType())
@@ -111,6 +112,7 @@ public class TableDataService extends TableDataServiceGrpc.TableDataServiceImplB
 
         cardTableList.forEach((data) -> {
             CardTableData cardTableData = CardTableData.newBuilder()
+                    .setId(data.getId())
                     .setBillName(data.getBillName())
                     .setBillValue(data.getBillValue())
                     .setBillDescription(data.getBillDescription())
@@ -120,6 +122,24 @@ public class TableDataService extends TableDataServiceGrpc.TableDataServiceImplB
         });
 
         CardTableDataResponse response = responseBuilder.build();
+
+        responseObserver.onNext(response);
+        responseObserver.onCompleted();
+    }
+
+    @Override
+    public void deleteItemFromCardTable(DeleteItemFromTableRequest request, StreamObserver<GenericResponse> responseObserver) {
+        cardTableRepository.deleteById(request.getId());
+        GenericResponse response = GenericResponse.newBuilder().setMessage("Item excluído").build();
+
+        responseObserver.onNext(response);
+        responseObserver.onCompleted();
+    }
+
+    @Override
+    public void deleteItemFromMainTable(DeleteItemFromTableRequest request, StreamObserver<GenericResponse> responseObserver) {
+        mainTableRepository.deleteById(request.getId());
+        GenericResponse response = GenericResponse.newBuilder().setMessage("Item excluído").build();
 
         responseObserver.onNext(response);
         responseObserver.onCompleted();

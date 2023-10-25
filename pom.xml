@@ -86,7 +86,7 @@
 
     <modules>
         <module>proto</module>
-        <module>main-table-service</module>
+        <module>table-service</module>
         <module>user-service</module>
         <module>security-service</module>
     </modules>
