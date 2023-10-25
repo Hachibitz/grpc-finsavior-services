@@ -139,8 +139,43 @@ public class TableDataService extends TableDataServiceGrpc.TableDataServiceImplB
     @Override
     public void deleteItemFromMainTable(DeleteItemFromTableRequest request, StreamObserver<GenericResponse> responseObserver) {
         mainTableRepository.deleteById(request.getId());
-        GenericResponse response = GenericResponse.newBuilder().setMessage("Item excluído").build();
 
+        GenericResponse response = GenericResponse.newBuilder().setMessage("Item excluído").build();
+        responseObserver.onNext(response);
+        responseObserver.onCompleted();
+    }
+
+    @Override
+    public void editItemFromMainTable(BillUpdateRequest request, StreamObserver<GenericResponse> responseObserver) {
+        MainTable mainTable = MainTable.builder()
+                .id(request.getId())
+                .billDescription(request.getBill().getBillDescription())
+                .billName(request.getBill().getBillName())
+                .userId(request.getBill().getUserId())
+                .billType(request.getBill().getBillType())
+                .billValue(request.getBill().getBillValue())
+                .billDate(request.getBill().getBillDate())
+                .build();
+        mainTableRepository.save(mainTable);
+
+        GenericResponse response = GenericResponse.newBuilder().setMessage("Item salvo").build();
+        responseObserver.onNext(response);
+        responseObserver.onCompleted();
+    }
+
+    @Override
+    public void editItemFromCardTable(BillUpdateRequest request, StreamObserver<GenericResponse> responseObserver) {
+        CreditCardTable cardTable = CreditCardTable.builder()
+                .id(request.getId())
+                .billDescription(request.getBill().getBillDescription())
+                .billName(request.getBill().getBillName())
+                .userId(request.getBill().getUserId())
+                .billValue(request.getBill().getBillValue())
+                .billDate(request.getBill().getBillDate())
+                .build();
+        cardTableRepository.save(cardTable);
+
+        GenericResponse response = GenericResponse.newBuilder().setMessage("Item salvo").build();
         responseObserver.onNext(response);
         responseObserver.onCompleted();
     }

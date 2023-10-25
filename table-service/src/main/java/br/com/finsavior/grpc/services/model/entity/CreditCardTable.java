@@ -1,5 +1,7 @@
 package br.com.finsavior.grpc.services.model.entity;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -9,6 +11,8 @@ import javax.persistence.*;
 @Table(name = "credit_card_table")
 @Data
 @NoArgsConstructor
+@Builder
+@AllArgsConstructor
 public class CreditCardTable {
 
     @Id
