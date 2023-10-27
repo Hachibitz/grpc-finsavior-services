@@ -1,5 +1,6 @@
 package br.com.finsavior.grpc.services.service;
 
+import br.com.finsavior.grpc.services.model.enums.MonthEnum;
 import br.com.finsavior.grpc.tables.*;
 import br.com.finsavior.grpc.services.model.entity.CreditCardTable;
 import br.com.finsavior.grpc.services.model.entity.MainTable;
@@ -41,36 +42,73 @@ public class TableDataService extends TableDataServiceGrpc.TableDataServiceImplB
             isError.set(typeChecker == 0);
         }
 
+        if(isError.get()) {
+            Throwable throwable = new Throwable("Erro ao salvar, favor especificar a tabela do registro");
+            responseObserver.onError(throwable);
+        }
+
         if(request.getBillTable().equals(TableEnum.MAIN.getValue())){
             try {
                 ModelMapper modelMapper = new ModelMapper();
-                MainTable register = modelMapper.map(request ,MainTable.class);
-                register.setId(null);
-                mainTableRepository.save(register);
-                log.info("Registro salvo: "+register.toString());
+
+                if(request.getIsRecurrent()) {
+                    List<MonthEnum> months = List.of(MonthEnum.values());
+                    String requestMonth = request.getBillDate().split(" ")[0];
+                    String requestYear = request.getBillDate().split(" ")[1];
+                    int monthId = MonthEnum.valueOf(requestMonth.toUpperCase()).getId();
+
+                    for (MonthEnum month: months) {
+                        if(month.getId() >= monthId){
+                            MainTable register = modelMapper.map(request ,MainTable.class);
+                            register.setId(null);
+                            register.setBillDate(month.getValue()+" "+requestYear);
+                            mainTableRepository.save(register);
+                        }
+                    }
+                } else {
+                    MainTable register = modelMapper.map(request ,MainTable.class);
+                    register.setId(null);
+                    mainTableRepository.save(register);
+                    log.info("Registro salvo: "+register.toString());
+                }
             } catch (Exception e) {
                 log.error("Falha ao salvar o registro: "+e.getMessage());
                 isError.set(true);
                 e.printStackTrace();
+                responseObserver.onError(e);
             }
         }
 
         if(request.getBillTable().equals(TableEnum.CREDIT_CARD.getValue())){
             try {
                 ModelMapper modelMapper = new ModelMapper();
-                CreditCardTable register = modelMapper.map(request ,CreditCardTable.class);
-                register.setId(null);
-                cardTableRepository.save(register);
+
+                if(request.getIsRecurrent()) {
+                    List<MonthEnum> months = List.of(MonthEnum.values());
+                    String requestMonth = request.getBillDate().split(" ")[0];
+                    String requestYear = request.getBillDate().split(" ")[1];
+                    int monthId = MonthEnum.valueOf(requestMonth.toUpperCase()).getId();
+
+                    for (MonthEnum month: months) {
+                        if(month.getId() >= monthId){
+                            CreditCardTable register = modelMapper.map(request ,CreditCardTable.class);
+                            register.setId(null);
+                            register.setBillDate(month.getValue()+" "+requestYear);
+                            cardTableRepository.save(register);
+                        }
+                    }
+                } else {
+                    CreditCardTable register = modelMapper.map(request ,CreditCardTable.class);
+                    register.setId(null);
+                    cardTableRepository.save(register);
+                    log.info("Registro salvo: "+register.toString());
+                }
             } catch (Exception e) {
                 log.error("Falha ao salvar o registro: "+e.getMessage());
                 isError.set(true);
                 e.printStackTrace();
+                responseObserver.onError(e);
             }
-        }
-
-        if(isError.get()) {
-            Throwable throwable = new Throwable("Erro ao salvar, favor especificar a tabela do registro");
-            responseObserver.onError(throwable);
         }
 
         BillRegisterResponse response = BillRegisterResponse.newBuilder()
