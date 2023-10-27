@@ -84,7 +84,7 @@ public class TableDataService extends TableDataServiceGrpc.TableDataServiceImplB
 
     @Override
     public void loadMainTableData(MainTableDataRequest request, StreamObserver<MainTableDataResponse> responseObserver) {
-        List<MainTable> mainTableList = mainTableRepository.findAllByUserId(request.getUserId());
+        List<MainTable> mainTableList = mainTableRepository.findAllByUserIdAndBillDate(request.getUserId(), request.getBillDate());
         MainTableDataResponse.Builder responseBuilder = MainTableDataResponse.newBuilder();
 
         mainTableList.forEach((data) -> {
@@ -107,7 +107,7 @@ public class TableDataService extends TableDataServiceGrpc.TableDataServiceImplB
 
     @Override
     public void loadCardTableData(CardTableDataRequest request, StreamObserver<CardTableDataResponse> responseObserver) {
-        List<CreditCardTable> cardTableList = cardTableRepository.findAllByUserId(request.getUserId());
+        List<CreditCardTable> cardTableList = cardTableRepository.findAllByUserIdAndBillDate(request.getUserId(), request.getBillDate());
         CardTableDataResponse.Builder responseBuilder = CardTableDataResponse.newBuilder();
 
         cardTableList.forEach((data) -> {

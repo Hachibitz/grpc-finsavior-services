@@ -8,5 +8,5 @@ import java.util.List;
 
 @Repository
 public interface MainTableRepository extends JpaRepository<MainTable, Long> {
-    public List<MainTable> findAllByUserId(Long userId);
+    public List<MainTable> findAllByUserIdAndBillDate(Long userId, String billDate);
 }
