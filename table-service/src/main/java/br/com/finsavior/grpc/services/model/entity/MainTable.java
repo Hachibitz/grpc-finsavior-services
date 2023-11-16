@@ -36,4 +36,7 @@ public class MainTable {
 
     @Column(name = "bill_description")
     private String billDescription;
+
+    @Column(name = "is_paid")
+    private boolean isPaid;
 }

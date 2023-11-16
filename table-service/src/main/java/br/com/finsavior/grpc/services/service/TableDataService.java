@@ -133,6 +133,7 @@ public class TableDataService extends TableDataServiceGrpc.TableDataServiceImplB
                     .setBillType(data.getBillType())
                     .setBillDescription(data.getBillDescription())
                     .setBillDate(data.getBillDate())
+                    .setIsPaid(data.isPaid())
                     .build();
             responseBuilder.addMainTableData(mainTableData);
         });
@@ -193,6 +194,7 @@ public class TableDataService extends TableDataServiceGrpc.TableDataServiceImplB
                 .billType(request.getBill().getBillType())
                 .billValue(request.getBill().getBillValue())
                 .billDate(request.getBill().getBillDate())
+                .isPaid(request.getBill().getIsPaid())
                 .build();
         mainTableRepository.save(mainTable);
 
