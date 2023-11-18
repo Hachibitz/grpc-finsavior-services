@@ -7,6 +7,7 @@ import br.com.finsavior.grpc.services.model.entity.MainTable;
 import br.com.finsavior.grpc.services.model.enums.TableEnum;
 import br.com.finsavior.grpc.services.repository.CreditCardTableRepository;
 import br.com.finsavior.grpc.services.repository.MainTableRepository;
+import io.grpc.Status;
 import io.grpc.netty.shaded.io.netty.handler.codec.http.HttpResponseStatus;
 import io.grpc.stub.StreamObserver;
 import lombok.extern.slf4j.Slf4j;
@@ -43,8 +44,9 @@ public class TableDataService extends TableDataServiceGrpc.TableDataServiceImplB
         }
 
         if(isError.get()) {
-            Throwable throwable = new Throwable("Erro ao salvar, favor especificar a tabela do registro");
-            responseObserver.onError(throwable);
+            Status status = Status.INTERNAL.withDescription("Erro ao salvar, favor especificar a tabela do registro");
+            responseObserver.onError(status.asRuntimeException());
+            return;
         }
 
         if(request.getBillTable().equals(TableEnum.MAIN.getValue())){
@@ -73,9 +75,10 @@ public class TableDataService extends TableDataServiceGrpc.TableDataServiceImplB
                 }
             } catch (Exception e) {
                 log.error("Falha ao salvar o registro: "+e.getMessage());
-                isError.set(true);
                 e.printStackTrace();
-                responseObserver.onError(e);
+                Status status = Status.INTERNAL.withDescription(e.getMessage());
+                responseObserver.onError(status.asRuntimeException());
+                return;
             }
         }
 
@@ -105,9 +108,10 @@ public class TableDataService extends TableDataServiceGrpc.TableDataServiceImplB
                 }
             } catch (Exception e) {
                 log.error("Falha ao salvar o registro: "+e.getMessage());
-                isError.set(true);
                 e.printStackTrace();
-                responseObserver.onError(e);
+                Status status = Status.INTERNAL.withDescription(e.getMessage());
+                responseObserver.onError(status.asRuntimeException());
+                return;
             }
         }
 
@@ -169,8 +173,8 @@ public class TableDataService extends TableDataServiceGrpc.TableDataServiceImplB
     @Override
     public void deleteItemFromCardTable(DeleteItemFromTableRequest request, StreamObserver<GenericResponse> responseObserver) {
         cardTableRepository.deleteById(request.getId());
-        GenericResponse response = GenericResponse.newBuilder().setMessage("Item excluído").build();
 
+        GenericResponse response = GenericResponse.newBuilder().setMessage("Item excluído").build();
         responseObserver.onNext(response);
         responseObserver.onCompleted();
     }
